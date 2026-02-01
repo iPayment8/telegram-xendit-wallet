@@ -115,5 +115,17 @@ module.exports = async function handler(req, res) {
         metadata: { bank_code, account_number, account_name }
       });
 
-      await db.updateUserBalance(user.id, Number(user.balance)
-
+      // subtract the requested amount from user's balance
+      await db.updateUserBalance(user.id, Number(user.balance) - amount);
+
+      await sendMessage(TELEGRAM_TOKEN, telegram_id, `Withdrawal request created for ${amount}. An admin will process payout.\nRequest id: ${external_id}`);
+      return res.status(200).send('ok');
+    }
+
+    await sendMessage(TELEGRAM_TOKEN, telegram_id, 'Command not recognized. Use /start to see available commands.');
+    return res.status(200).send('ok');
+  } catch (err) {
+    console.error('telegram webhook error', err?.response?.data || err.message);
+    return res.status(500).send('error');
+  }
+};
