@@ -1,0 +1,9 @@
+/* Minimal styling */
+html, body, #__next {
+  height: 100%;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+input, button, textarea {
+  font-family: inherit;
+}
